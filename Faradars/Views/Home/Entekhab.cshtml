@@ -1,0 +1,172 @@
+﻿@model Faradars.Models.ViewModel.Page
+@{
+    ViewData["Title"] = "رزرو";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == null)
+{
+    <div class="theme-hero-area">
+        <div class="theme-hero-area-bg-wrap">
+            <div class="theme-hero-area-bg-pattern theme-hero-area-bg-pattern-ultra-light" style="background-image:url(/img/img/patterns/4.png);"></div>
+            <div class="theme-hero-area-grad-mask"></div>
+        </div>
+        <div class="theme-hero-area-body">
+            <div class="container">
+                <div class="theme-item-page-header _pb-50 theme-item-page-header-white">
+                    <div class="theme-item-page-header-body">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="theme-item-page-rooms-table _p-10 _bg-w _mb-mob-30">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>نوع اتاق</th>
+                    <th>ظرفیت اتاق</th>
+                    <th>خدمات اتاق</th>
+                    <th>قیمت برای هر شب</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="theme-item-page-rooms-table-type">
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        موردی یافت نشد
+                    </td>
+                    <td class="theme-item-page-rooms-table-price">
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+
+<div class="theme-hero-area">
+    <div class="theme-hero-area-bg-wrap">
+        <div class="theme-hero-area-bg-pattern theme-hero-area-bg-pattern-ultra-light" style="background-image:url(img/img/patterns/travel/4.png);"></div>
+        <div class="theme-hero-area-grad-mask"></div>
+    </div>
+    <div class="theme-hero-area-body">
+        <div class="container">
+            <div class="theme-item-page-header _pb-50 theme-item-page-header-white">
+                <div class="theme-item-page-header-body">
+                    <ul class="theme-item-page-header-stars">
+                        @{
+                            int j = Convert.ToInt32(Model.lstjozeyats.FirstOrDefault().TedadStare);
+                            for (int i = 0; i < j; i++)
+                            {
+                                <li>
+                                    <i class="fa fa-star"></i>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <h2 class="theme-item-page-header-title">@Model.NameHotel</h2>
+                    <div class="theme-item-page-header-price">
+                        <div class="theme-item-page-header-price-body">
+                            <p class="_fs-sm">شروع قیمت برای یک شب</p>
+                            <p class="_fs-xl">@Model.GheymatYekShab ریال</p>
+                        </div>
+                        <a class="btn _tt-uc btn-primary-inverse" data-scroll href="#booking-scroll">لیست اتاق ها</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="theme-item-page-rooms-table _p-10 _bg-w _mb-mob-30">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>نوع اتاق</th>
+                <th>ظرفیت اتاق</th>
+                <th>خدمات اتاق</th>
+                <th>قیمت برای هر شب</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model.lstjozeyats)
+            {
+                <tr>
+
+                    <td class="theme-item-page-rooms-table-type">
+                        <h5 class="theme-item-page-rooms-table-type-title">
+                            @item.TedadTakht
+                            <i class="fa fa-bed"></i>
+                        </h5>
+                        <img class="theme-item-page-rooms-table-type-img" src="@Model.imgUrl" style="width:300px !important; height:150px !important;" alt="Image Alternative text" title="Image Title" />
+                    </td>
+                    <td>
+                        <ul class="theme-item-page-rooms-table-guests-count">
+                            @item.ZarfiatOtagh
+                            <li>
+                                <i class="fa fa-male"></i>
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="theme-item-page-rooms-table-type-feature-list">
+
+                            @foreach (var item1 in Model.lstemakanat)
+                            {
+                                <li>
+                                    <i class="fa @item1.Emkanat_Icon theme-item-page-rooms-table-type-feature-list-icon"></i>@item1.Emkanat_Name
+
+                                </li>
+                            }
+
+                        </ul>
+                    </td>
+                    <td class="theme-item-page-rooms-table-price">
+                        <div>
+                            <div class="theme-item-page-rooms-table-price-night">
+                                <p class="text-bold-600 _fs-b">@Model.GheymatYekShab  <small> ریال </small> </p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form asp-action="Rezerv" asp-controller="Rezerv" method="post">
+                            <input type="hidden" name="idhotel" value="@ViewBag.id" />
+                            <input type="hidden" name="tedadtakht" value="@item.TedadTakht" />
+                            <input type="hidden" name="khoroj" value="@ViewBag.khoroj" />
+                            <input type="hidden" name="vorod" value="@ViewBag.vorod" />
+                            <input type="hidden" name="zarfeyat" value="@item.ZarfiatOtagh" />
+                            <i class="fa fa-arrow-left"></i> <input class="btn btn-primary-inverse btn-block" type="submit" value="رزرو کنید" />
+                        </form>
+
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+
+}
+
+
+
